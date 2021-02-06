@@ -1,3 +1,5 @@
+const ValetudoManualControlAction = require("../../../lib/entities/core/ValetudoManualControlAction");
+
 export class ApiService {
     /**
      * @private
@@ -252,20 +254,35 @@ export class ApiService {
     }
 
     static async startManualControl() {
-        await this.fetch("PUT", "api/start_manual_control");
+        await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/enter");
     }
 
     static async stopManualControl() {
-        await this.fetch("PUT", "api/stop_manual_control");
+        await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/leave");
     }
 
     static async setManualControl(angle, velocity, duration, sequenceId) {
-        await this.fetch("PUT", "api/set_manual_control", {
-            angle: angle,
-            velocity: velocity,
-            duration: duration,
-            sequenceId: sequenceId
-        });
+        if (velocity > 0.1) {
+            await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
+                action: ValetudoManualControlAction.FORWARD
+            });
+        } else if (velocity < -0.12) {
+            await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
+                action: ValetudoManualControlAction.BACKWARDS
+            });
+        } else if (angle > 0.4) {
+            await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
+                action: ValetudoManualControlAction.COUNTERCLOCKWISE
+            });
+        } else if (angle < -0.4) {
+            await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
+                action: ValetudoManualControlAction.CLOCKWISE
+            });
+        } else {
+            await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
+                action: ValetudoManualControlAction.STOP
+            });
+        }
     }
 
     static async getValetudoVersion() {
