@@ -1,5 +1,3 @@
-const ValetudoManualControlAction = require("../../../lib/entities/core/ValetudoManualControlAction");
-
 export class ApiService {
     /**
      * @private
@@ -264,23 +262,23 @@ export class ApiService {
     static async setManualControl(angle, velocity, duration, sequenceId) {
         if (velocity > 0.1) {
             await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
-                action: ValetudoManualControlAction.FORWARD
+                action: "forward"
             });
         } else if (velocity < -0.12) {
             await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
-                action: ValetudoManualControlAction.BACKWARDS
+                action: "backwards"
             });
         } else if (angle > 0.4) {
             await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
-                action: ValetudoManualControlAction.COUNTERCLOCKWISE
+                action: "counterclockwise"
             });
         } else if (angle < -0.4) {
             await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
-                action: ValetudoManualControlAction.CLOCKWISE
+                action: "clockwise"
             });
         } else {
             await this.fetch("PUT", "api/v2/robot/capabilities/ManualControlCapability/control", {
-                action: ValetudoManualControlAction.STOP
+                action: "stop"
             });
         }
     }
