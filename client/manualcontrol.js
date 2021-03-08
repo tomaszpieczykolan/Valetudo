@@ -268,7 +268,7 @@ async function refreshManualControlMode() {
         if (StatusStateAttribute && StatusStateAttribute.value === "manual_control") {
             _startManualControl();
         } else {
-            _stopManualControl();
+            // _stopManualControl();
         }
     } catch (err) {
         ons.notification.toast(err.message,
